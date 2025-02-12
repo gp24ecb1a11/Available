@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Requests</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="text-gray-100 body-font bg-blue-500 shadow-md">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+                <a href="https://dormdash1.netlify.app/" class="mr-5 hover:text-gray-300">Home</a>
+                <a href="#" class="mr-5 hover:text-gray-300">Available Requests</a>
+                <a href="https://dormdash1request.netlify.app/" class="mr-5 hover:text-gray-300">Make a request</a>
+            </nav>
+            <a class="flex title-font font-medium items-center text-gray-900 lg:justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
+                    viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span class="ml-3 text-xl text-white">Dorm Dash</span>
+            </a>
+            <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+                <a href="https://dormdash1login.netlify.app/">
+                    <button
+                        class="inline-flex items-center bg-gray-200 text-gray-800 py-1 px-3 rounded hover:bg-gray-300">Log
+                        in</button>
+                </a>
+                <a href="https://dormdash1signup.netlify.app/" class="ml-4">
+                    <button
+                        class="inline-flex items-center bg-indigo-500 text-white py-1 px-3 rounded hover:bg-indigo-600">Sign
+                        Up</button>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <section class="container mx-auto px-5 py-10">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Available Orders</h1>
+
+        <!-- Orders Container -->
+        <div class="space-y-4">
+            <!-- Dummy Order Boxes -->
+            <div class="bg-white shadow-md rounded-lg p-5 border">
+                <h2 class="text-lg font-semibold text-gray-900">Order 1: Food Delivery</h2>
+                <p class="text-gray-600">Need someone to pick up my food from the canteen. Willing to pay ₹50 extra.</p>
+                <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 take-order">Take
+                    Order</button>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg p-5 border">
+                <h2 class="text-lg font-semibold text-gray-900">Order 2: Stationery Pickup</h2>
+                <p class="text-gray-600">Need a pack of A4 sheets and some pens from the store. Urgent request.</p>
+                <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 take-order">Take
+                    Order</button>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg p-5 border">
+                <h2 class="text-lg font-semibold text-gray-900">Order 3: Laundry Service</h2>
+                <p class="text-gray-600">Looking for someone to drop my clothes at the laundry room before 5 PM.</p>
+                <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 take-order">Take
+                    Order</button>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg p-5 border">
+                <h2 class="text-lg font-semibold text-gray-900">Order 4: Book Return</h2>
+                <p class="text-gray-600">Need help returning a book to the library. Can pay ₹20 as a tip.</p>
+                <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 take-order">Take
+                    Order</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-gray-600 body-font">
+        <div class="container px-5 py-8 mx-auto flex items-center justify-between">
+            <a class="flex title-font font-medium items-center text-gray-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"
+                    viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span class="ml-3 text-xl">Dorm Dash</span>
+            </a>
+            <p class="text-sm text-gray-500">© 2024 Dorm Dash. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript to Handle Order Taking -->
+    <script>
+        document.querySelectorAll('.take-order').forEach(button => {
+            button.addEventListener('click', function () {
+                this.innerText = 'Order Taken ✅';
+                this.classList.remove('bg-green-500', 'hover:bg-green-600');
+                this.classList.add('bg-gray-500', 'cursor-not-allowed');
+                this.disabled = true;
+            });
+        });
+    </script>
+
+</body>
+
+</html>
