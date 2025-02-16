@@ -13,7 +13,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Function to fetch and display requests
+// Fetch and display requests
 function fetchRequests() {
   const requestsContainer = document.getElementById("requests-container");
   requestsContainer.innerHTML = ""; // Clear previous data
@@ -23,16 +23,16 @@ function fetchRequests() {
       const order = childSnapshot.val();
       const orderElement = document.createElement("div");
 
+      orderElement.className = "p-4 bg-gray-100 rounded-lg shadow-md";
       orderElement.innerHTML = `
-        <div class="order">
-          <h3>${order.serviceName} - Order #${order.orderNumber}</h3>
-          <p><strong>Name:</strong> ${order.name}</p>
-          <p><strong>Courier Service:</strong> ${order.courierService}</p>
-          <p><strong>Package Size:</strong> ${order.packageSize}</p>
-          <p><strong>Arrival Time:</strong> ${order.arrivalTime}</p>
-          <button onclick="takeOrder('${childSnapshot.key}', this)">Take Order</button>
-        </div>
-        <hr>
+        <h3 class="text-xl font-semibold">${order.serviceName} - Order #${order.orderNumber}</h3>
+        <p><strong>Name:</strong> ${order.name}</p>
+        <p><strong>Courier Service:</strong> ${order.courierService}</p>
+        <p><strong>Package Size:</strong> ${order.packageSize}</p>
+        <p><strong>Arrival Time:</strong> ${order.arrivalTime}</p>
+        <button onclick="takeOrder('${childSnapshot.key}', this)" class="mt-2 bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600">
+          Take Order
+        </button>
       `;
       requestsContainer.appendChild(orderElement);
     });
@@ -44,7 +44,7 @@ function takeOrder(orderId, button) {
   db.ref("orders/" + orderId).remove().then(() => {
     button.innerText = "Order Taken ✅";
     button.disabled = true;
-    button.style.backgroundColor = "gray";
+    button.classList.add("bg-gray-500");
     fetchRequests(); // Refresh list
   });
 }
