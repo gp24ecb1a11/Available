@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="available.js" defer></script>
     <title>Available Requests</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="available_requests.js"></script>
 </head>
-<body class="bg-gray-100">
 
-    <!-- Header -->
-    <header class="bg-blue-500 p-5 text-white text-lg flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Dorm Dash</h1>
-        <nav class="space-x-5">
-            <a href="https://dormdash1.netlify.app/" class="hover:underline">Home</a>
-            <a href="#" class="underline">Available Requests</a>
-            <a href="https://dormdash1request.netlify.app/" class="hover:underline">Make a Request</a>
-        </nav>
+<body class="bg-gray-100">
+    <header class="text-gray-600 body-font bg-blue-500">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center justify-between">
+            <span class="ml-3 text-xl text-white">Dorm Dash</span>
+            <nav class="flex space-x-5 text-white text-lg">
+                <a href="make_request.html" class="hover:text-gray-900">Make a Request</a>
+            </nav>
+        </div>
     </header>
 
-    <!-- Requests Section -->
-    <section class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
-        <h2 class="text-2xl font-bold text-gray-900 mb-5 text-center">Available Requests</h2>
-        <div id="requests-container" class="space-y-4"></div>
+    <section class="container mx-auto px-5 py-10">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-6">Available Requests</h1>
+        <div id="requestsContainer" class="space-y-4"></div>
     </section>
 
-    <!-- Footer -->
-    <footer class="text-center text-gray-600 mt-10 py-4">
-        © 2024 Dorm Dash
+    <footer class="text-gray-600 body-font text-center py-4">
+        <p class="text-sm text-gray-500">© 2024 Dorm Dash. All rights reserved.</p>
     </footer>
-
 </body>
+
 </html>
