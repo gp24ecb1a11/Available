@@ -1,53 +1,49 @@
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDobwvOdyiwBCjNNBUyRNStwrMQmhFv3vY",
-  authDomain: "dormdash-1becd.firebaseapp.com",
-  databaseURL: "https://dormdash-1becd-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "dormdash-1becd",
-  storageBucket: "dormdash-1becd.firebasestorage.app",
-  messagingSenderId: "789434000901",
-  appId: "1:789434000901:web:a8f28358c7e0091b2ede6c"
+    apiKey: "AIzaSyAeOS8_0tDWKnfAwLf0GRKr6JaopYj1nnY",
+    authDomain: "dormdash-40a10.firebaseapp.com",
+    databaseURL: "https://dormdash-40a10-default-rtdb.firebaseio.com/",
+    projectId: "dormdash-40a10",
+    storageBucket: "dormdash-40a10.appspot.com",
+    messagingSenderId: "219135353050",
+    appId: "1:219135353050:web:49446a2e74414ebf8105e3"
 };
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const database = firebase.database();
 
 // Fetch and display requests
-function fetchRequests() {
-  const requestsContainer = document.getElementById("requests-container");
-  requestsContainer.innerHTML = ""; // Clear previous data
+document.addEventListener("DOMContentLoaded", function() {
+    const requestsContainer = document.getElementById("requests-container");
 
-  db.ref("orders").once("value", (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const order = childSnapshot.val();
-      const orderElement = document.createElement("div");
+    database.ref("requests").on("value", function(snapshot) {
+        requestsContainer.innerHTML = "";
+        snapshot.forEach(function(childSnapshot) {
+            const request = childSnapshot.val();
+            const requestId = childSnapshot.key;
 
-      orderElement.className = "p-4 bg-gray-100 rounded-lg shadow-md";
-      orderElement.innerHTML = `
-        <h3 class="text-xl font-semibold">${order.serviceName} - Order #${order.orderNumber}</h3>
-        <p><strong>Name:</strong> ${order.name}</p>
-        <p><strong>Courier Service:</strong> ${order.courierService}</p>
-        <p><strong>Package Size:</strong> ${order.packageSize}</p>
-        <p><strong>Arrival Time:</strong> ${order.arrivalTime}</p>
-        <button onclick="takeOrder('${childSnapshot.key}', this)" class="mt-2 bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600">
-          Take Order
-        </button>
-      `;
-      requestsContainer.appendChild(orderElement);
+            if (request.status === "pending") {
+                const requestElement = document.createElement("div");
+                requestElement.className = "bg-gray-200 p-4 rounded shadow";
+                requestElement.innerHTML = `
+                    <p><strong>Name:</strong> ${request.fullName}</p>
+                    <p><strong>Order Number:</strong> ${request.orderNumber}</p>
+                    <p><strong>Service:</strong> ${request.serviceName}</p>
+                    <p><strong>Courier:</strong> ${request.courierService}</p>
+                    <p><strong>Size:</strong> ${request.packageSize}</p>
+                    <p><strong>Arrival:</strong> ${request.arrivalTime}</p>
+                    <p><strong>OTP:</strong> ${request.otp}</p>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded mt-2 accept-btn" data-id="${requestId}">Accept Order</button>
+                `;
+                requestsContainer.appendChild(requestElement);
+            }
+        });
     });
-  });
-}
 
-// Function to take an order
-function takeOrder(orderId, button) {
-  db.ref("orders/" + orderId).remove().then(() => {
-    button.innerText = "Order Taken ✅";
-    button.disabled = true;
-    button.classList.add("bg-gray-500");
-    fetchRequests(); // Refresh list
-  });
-}
-
-// Fetch requests on page load
-window.onload = fetchRequests;
+    requestsContainer.addEventListener("click", function(event) {
+        if (event.target.classList.contains("accept-btn")) {
+            const requestId = event.target.getAttribute("data-id");
+            database.ref("requests/" + requestId).update({ status: "accepted" });
+        }
+    });
+});
