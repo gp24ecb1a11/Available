@@ -1,60 +1,48 @@
-// Firebase Configuration
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 const firebaseConfig = {
     apiKey: "AIzaSyAeOS8_0tDWKnfAwLf0GRKr6JaopYj1nnY",
     authDomain: "dormdash-40a10.firebaseapp.com",
-    databaseURL: "https://dormdash-40a10-default-rtdb.firebaseio.com/",
     projectId: "dormdash-40a10",
-    storageBucket: "dormdash-40a10.appspot.com",
+    storageBucket: "dormdash-40a10.firebasestorage.app",
     messagingSenderId: "219135353050",
     appId: "1:219135353050:web:49446a2e74414ebf8105e3"
-};
+  };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const requestsContainer = document.getElementById("requestsContainer");
 
-// Fetch and display requests
-document.addEventListener("DOMContentLoaded", function() {
-    const requestsContainer = document.getElementById("requests-container");
+async function loadRequests() {
+    const querySnapshot = await getDocs(collection(db, "requests"));
+    requestsContainer.innerHTML = "";
 
-    database.ref("requests").on("value", function(snapshot) {
-        requestsContainer.innerHTML = "";
-        if (!snapshot.exists()) {
-            requestsContainer.innerHTML = "<p class='text-gray-600'>No available requests.</p>";
-            return;
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (!data.taken) {
+            const requestElement = document.createElement("div");
+            requestElement.classList = "bg-white shadow-md rounded-lg p-5 border";
+            requestElement.innerHTML = `
+                <h2 class="text-lg font-semibold text-gray-900">${data.title}</h2>
+                <p class="text-gray-600">${data.description}</p>
+                <p class="text-gray-600 font-semibold">Reward: ₹${data.reward}</p>
+                <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 take-order" data-id="${doc.id}">
+                    Take Order
+                </button>
+            `;
+            requestsContainer.appendChild(requestElement);
         }
+    });
 
-        snapshot.forEach(function(childSnapshot) {
-            const request = childSnapshot.val();
-            const requestId = childSnapshot.key;
+    document.querySelectorAll('.take-order').forEach(button => {
+        button.addEventListener('click', async function () {
+            const orderId = this.getAttribute("data-id");
+            await updateDoc(doc(db, "requests", orderId), { taken: true });
 
-            if (request.status === "pending") {
-                const requestElement = document.createElement("div");
-                requestElement.className = "bg-gray-200 p-4 rounded shadow";
-                requestElement.innerHTML = `
-                    <p><strong>Name:</strong> ${request.fullName}</p>
-                    <p><strong>Order Number:</strong> ${request.orderNumber}</p>
-                    <p><strong>Service:</strong> ${request.serviceName}</p>
-                    <p><strong>Courier:</strong> ${request.courierService}</p>
-                    <p><strong>Size:</strong> ${request.packageSize}</p>
-                    <p><strong>Arrival:</strong> ${request.arrivalTime}</p>
-                    <p><strong>OTP:</strong> ${request.otp}</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded mt-2 accept-btn" data-id="${requestId}">Accept Order</button>
-                `;
-                requestsContainer.appendChild(requestElement);
-            }
+            alert("Order Taken!");
+            loadRequests();
         });
     });
+}
 
-    // Accept order functionality
-    requestsContainer.addEventListener("click", function(event) {
-        if (event.target.classList.contains("accept-btn")) {
-            const requestId = event.target.getAttribute("data-id");
-            database.ref("requests/" + requestId).update({ status: "accepted" }).then(() => {
-                alert("Order accepted!");
-            }).catch(error => {
-                console.error("Error accepting request:", error);
-            });
-        }
-    });
-});
+loadRequests();
