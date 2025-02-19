@@ -8,6 +8,7 @@ const firebaseConfig = {
     messagingSenderId: "219135353050",
     appId: "1:219135353050:web:49446a2e74414ebf8105e3"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
@@ -18,6 +19,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     database.ref("requests").on("value", function(snapshot) {
         requestsContainer.innerHTML = "";
+        if (!snapshot.exists()) {
+            requestsContainer.innerHTML = "<p class='text-gray-600'>No available requests.</p>";
+            return;
+        }
+
         snapshot.forEach(function(childSnapshot) {
             const request = childSnapshot.val();
             const requestId = childSnapshot.key;
@@ -40,10 +46,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+    // Accept order functionality
     requestsContainer.addEventListener("click", function(event) {
         if (event.target.classList.contains("accept-btn")) {
             const requestId = event.target.getAttribute("data-id");
-            database.ref("requests/" + requestId).update({ status: "accepted" });
+            database.ref("requests/" + requestId).update({ status: "accepted" }).then(() => {
+                alert("Order accepted!");
+            }).catch(error => {
+                console.error("Error accepting request:", error);
+            });
         }
     });
 });
