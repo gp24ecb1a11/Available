@@ -37,6 +37,8 @@ async function loadRequests() {
     document.querySelectorAll('.take-order').forEach(button => {
         button.addEventListener('click', async function () {
             const orderId = this.getAttribute("data-id");
+            const confirmOrder = confirm("Are you sure you want to accept this order?");
+            if (!confirmOrder) return; // Exit if user cancels
             await updateDoc(doc(db, "requests", orderId), { taken: true });
 
             alert("Order Taken!");
