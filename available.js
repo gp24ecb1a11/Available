@@ -45,6 +45,22 @@ async function loadRequests() {
             loadRequests();
         });
     });
+    document.querySelectorAll('.take-order').forEach(button => {
+    button.addEventListener('click', function () {
+        const orderId = this.getAttribute("data-id");
+        const title = this.getAttribute("data-title");
+        const description = this.getAttribute("data-description");
+        const reward = this.getAttribute("data-reward");
+
+        // Confirmation popup
+        const confirmOrder = confirm("Are you sure you want to accept this order?");
+        if (!confirmOrder) return;
+
+        // Redirect to Accepting Order page with order details in URL
+        window.location.href = `https://dormdash1accept.netlify.app/?id=${orderId}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&reward=${encodeURIComponent(reward)}`;
+    });
+});
+
 }
 
 loadRequests();
