@@ -19,12 +19,15 @@ const auth = getAuth(app);
 
 // Ensure user is signed in
 onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "https://dormdash1.netlify.app/"; // Redirect to login page
-    } else {
-        document.getElementById("usernameDisplay").textContent = user.email; // Show user email
+    if (user) {
+        document.getElementById("usernameDisplay").textContent = user.email;
         document.getElementById("usernameDisplay").classList.remove("hidden");
-        loadRequests();
+        loadRequests(); // Load requests only after authentication is confirmed
+    } else {
+        // Delay the redirect slightly to ensure Firebase has time to process auth state
+        setTimeout(() => {
+            window.location.href = "https://dormdash1.netlify.app/";
+        }, 1000); // 1-second delay before redirecting
     }
 });
 
